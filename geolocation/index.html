@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Geolocation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script type="text/javascript">
+        if (!navigator.geolocation) {
+            alert('Geolocation not supported in this browser');
+        } else {
+            navigator.geolocation.getCurrentPosition(onPositionReady, onError, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 30 * 1000
+            });
+
+            var watchid = navigator.geolocation.watchPosition(onPositionReady, onError);
+
+            navigator.clearWatch(watchid);
+        }
+
+        function onPositionReady(position) {
+            var latitute = position.coords.latitute;
+            var longitute = position.coords.longitute;
+            var altitude = position.coords.altitude;
+            var accuracy = position.coords.accuracy;
+            var altitudeAccuracy = position.coords.altitudeAccuracy;
+            var heading = position.coords.heading;
+            var speed = position.coords.speed;
+            var timestamp = position.timestamp;
+        }
+
+        function onError(err) {
+            switch (err) {
+                case PositionError.PERMISSION_DENIED:
+
+                    break;
+                case PositionError.POSITION_UNAVAILABLE:
+
+                    break;
+                case PositionError.TIMEOUT:
+
+                    break;
+                default:
+                    break;
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web Store</title>
+    <script>
+        // https://www.w3.org/TR/webstorage/
+        if ("localStorage" in window && window["localStorage"] != null) {
+            // Write a language preference to local storage
+            window.localStorage["language"] = "en-us";
+            //window.localStorage.language = "en-us";
+
+            let language = window.localStorage["language"];
+            //let language = window.localStorage.language;
+
+            if (language) {
+                alert(language);
+            }
+
+            // Write count to a local storage
+            window.localStorage["count"] = 16;
+
+            //read count from local storage
+            let item = window.localStorage["count"];
+
+            if (item) {
+                let count = parseInt(item); // convert to integer
+            }
+
+            // Write point to local storage
+            let x = 100;
+            let y = 200;
+
+            window.localStorage["point"] = [x, y]; // Stored as "100,200"
+
+            // Read point from local storage
+            let point = window.localStorage["point"];
+
+            if (point) {
+                let coords = point.split(",");
+                x = parseInt(coords[0]);
+                y = parseInt(coords[1]);
+            }
+
+            let widget = {
+                a: x,
+                b: y
+            };
+
+            // Write widget to local storage
+            window.localStorage["widget"] = JSON.stringify(widget);
+
+            // Read widget from local storage
+            item = window.localStorage["widget"];
+
+            if(item) {
+                widget = JSON.parse(item); // Convert to widget
+            }
+
+            for (let i = 0; i < window.length.length; i++) {
+                const key = window.localStorage.key[i];
+                let val = window.localStorage[key];
+            }
+
+            // Remove a single item
+            window.localStorage.removeItem("language");
+
+            // Remove all items
+            window.localStorage.clear();
+
+            window.addEventListener("storage", onStorageChanged, false);
+
+            function onStorageChanged(e) {
+                let key = e.key;
+                let oldval = e.oldValue;
+                let newval = e.newValue;
+                let url = e.url;
+            }
+
+            try {
+                // Write a language preference to local storage
+                window.localStorage["language"] = "en-us";
+            } catch (e) {
+                if(e == QUOTA_EXCEEDED_ERR) {
+                    window.alert("Storage quota exceeded");
+                }
+            }
+
+        } else {
+            alert('Local Storage not supported in this browser');
+        }
+
+        if ("sessionStorage" in window && window["sessionStorage"] != null) {
+            // The sintax and functions are the same for session storage and local storage.
+            // Session store is not persistent, it will go away when the session ends.
+        } else {
+            alert('Session Storage not supported in this browser');
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

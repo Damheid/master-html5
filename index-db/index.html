@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Index DB</title>
+    <script>
+        if ("webkitIndexedDB" in window) {
+            window.indexedDB = window.webkitIndexedDB;
+        } else if ("mozIndexedDB" in window) {
+            window.indexedDB = window.webkitIndexedDB;
+        }
+        if (!window.indexedDB) {
+            alert('Index DB not supported in this browser');
+        } else {
+            var request = window.indexedDB.open("MyDatabase", 1); //Version 1
+
+            // Only called when the database does not exists and is created.
+            request.onupgradeneeded = function (e) {
+                var db = e.target.result; // Contais IDBDatabase reference
+
+                //TODO: Create object stores and indexes
+
+                var store = db.createObjectStore("employees", {
+                    //autoincrement: true, // Creates a unique key for each object add in the store.
+                    keyPath: "alias", // use each object's "alias" property as the object key.
+                });
+
+                store.createIndex("alias-index", "alias", {
+                    unique: true
+                });
+
+                store.createIndex('firstName', 'firstName');
+            }
+
+            // Called when the database is successfuly open
+            request.onsuccess = function (e) {
+                var db = e.target.result;
+
+                ///TODO: Use the database
+                alert(db.name + " version " + db.version);
+
+                for (var i = 0; i < db.objectStoreNames.length; i++) {
+                    alert(db.objectStoreNames[i]);
+                }
+
+                // Create a read-write transaction
+                var transaction = db.transaction(["employees"], "readwrite"); // Defaults to "readonly" for retrieving
+
+                // Get a reference to the object store named "employess"
+                var store = transaction.objectStore("employess");
+
+                var operation = store.add({
+                    firstName: "Sandinho",
+                    lastName: "Heiderich",
+                    alias: "damheid"
+                });
+
+                operation.onsuccess = function (e) {
+                    // Object added.
+                }
+
+                operation.onerror = function (e) {
+                    // Error to add object.
+                }
+
+                // There is no confirm to transaction. Will be commited if not aborted.
+                //transaction.abort(); // Cancel de add operation.
+
+                store.get("damheid").onsuccess = function (e) {
+                    var employee = e.target.result;
+                    employee.firstName = "Adam";
+
+                    store.put(employee).onsuccess = function (e) {
+                        // Object modified
+                    }
+                }
+
+                // store.openCursor(null, "prev").onsuccess = function (e) { // Cursor in reverse order
+                store.openCursor().onsuccess = function (e) {
+                    var cursor = e.target.result;
+
+                    if (cursor) {
+                        alert(
+                            cursor.key + ": " +
+                            cursor.value.firstName + " " +
+                            cursor.value.lastName
+                        );
+                        cursor.continue();
+                    }
+                }
+
+                // Get all index names registered in the object store
+                for (let i = 0; i < store.indexNames.length; i++) {
+                    alert(store.indexNames[i]);
+                }
+
+                var index = store.index("alias-index");
+
+                //index.openCursor(null, "prev").onsuccess = function (e) { // Cursor in reverse order
+                index.openCursor().onsuccess = function (e) {
+                    var cursor = e.target.result;
+
+                    if (cursor) {
+                        alert(
+                            cursor.key + ": " +
+                            cursor.value.firstName + " " +
+                            cursor.value.lastName
+                        );
+                        cursor.continue();
+                    }
+                }
+
+                index.get("damheid").onsuccess = function (e) {
+                    var employee = e.target.result;
+                    alert(employee.firstName + " " + employee.lastName);
+                }
+
+                var nameIndex = store.index("firstName");
+
+                nameIndex.openCursor(null, "nextunique").onsuccess = function (e) {
+                    var cursor = e.target.result;
+
+                    if (cursor) {
+                        alert(
+                            cursor.key + ": " +
+                            cursor.value.firstName + " " +
+                            cursor.value.lastName
+                        );
+                        cursor.continue();
+                    }
+                }
+
+                // Creates a range to iterate through.
+                var range = IDBKeyRange.bound("damheid", "tim"); // Case sentive.
+                // var range = IDBKeyRange.only("damheid");
+
+                // Open a cursor inside a specific range.
+                nameIndex.openCursor(range).onsuccess = function (e) {
+                    var cursor = e.target.result;
+
+                    if (cursor) {
+                        alert(
+                            cursor.key + ": " +
+                            cursor.value.firstName + " " +
+                            cursor.value.lastName
+                        );
+                        cursor.continue();
+                    }
+                }
+
+                // Remove one object from the object store.
+                store.delete("damheid").onsuccess = function (e) {
+                    // Object deleted
+                }
+
+                // Remove all objects from the object store
+                store.clear().onsuccess = function (e) {
+                    // All objects deleted
+                }
+            }
+
+            var request2 = window.indexedDB.open("MyDatabase", 2); //Version 2
+
+            // Only called when the database ersion 2 does not exists and is created.
+            request.onupgradeneeded = function (e) {
+                var db = e.target.result;
+
+                var transaction = db.transaction(["employees"]);
+                var store = transaction.objectStore("employees");
+                store.deleteIndex("alias-index");
+
+                db.deleteObjectStore("employees"); // Can only be deleted in new version.
+            }
+
+            var request3 = window.indexedDB.deleteDatabase("myDatabase");
+
+            request.onsuccess = function (event) {
+                // Database deleted
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Canvas Sample</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+    <canvas id="first" width="400" height="200"></canvas>
+    <canvas id="second" width="400" height="200"></canvas>
+    <canvas id="third" width="400" height="200"></canvas>
+    <canvas id="fourth" width="400" height="200"></canvas>
+    <canvas id="fifth" width="400" height="200"></canvas>
+    <canvas id="sixth" width="400" height="200"></canvas>
+    <canvas id="seventh" width="400" height="200"></canvas>
+    <canvas id="eighth" width="400" height="200"></canvas>
+    <canvas id="nineth" width="400" height="200"></canvas>
+    <canvas id="tenth" width="400" height="200"></canvas>
+    <canvas id="eleventh" width="400" height="200"></canvas>
+    <canvas id="twelfth" width="400" height="200"></canvas>
+    <canvas id="thirteenth" width="400" height="200"></canvas>
+    <canvas id="fourteenth" width="400" height="200"></canvas>
+    <canvas id="fifteenth" width="400" height="200"></canvas>
+    <canvas id="sixteenth" width="400" height="200"></canvas>
+    <canvas id="seventeenth" width="400" height="200"></canvas>
+    <canvas id="eighteenth" width="400" height="200"></canvas>
+    <canvas id="nineteenth" width="400" height="200"></canvas>
+    <canvas id="twenty" width="400" height="200"></canvas>
+
+    <script>
+        if (!document.createElement("canvas").getContext) {
+            alert("this browser doesn't support canvases");
+        } else {
+            var firstCanvas = document.getElementById("first");
+            var dc1 = firstCanvas.getContext("2d");
+            dc1.strokeStyle = "red";
+            dc1.lineWidth = 8;
+            dc1.strokeRect(100, 50, 200, 100);
+
+            var secondCanvas = document.getElementById("second");
+            var dc2 = secondCanvas.getContext("2d");
+            dc2.fillStyle = "red";
+            dc2.fillRect(100, 50, 200, 100);
+
+            var thirdCanvas = document.getElementById("third");
+            var dc3 = thirdCanvas.getContext("2d");
+            var gradient3 = dc3.createLinearGradient(100, 50, 300, 50);
+            gradient3.addColorStop(0, "red");
+            gradient3.addColorStop(1, "yellow");
+            dc3.fillStyle = gradient3;
+            dc3.fillRect(100, 50, 200, 100);
+
+            var fourthCanvas = document.getElementById("fourth");
+            var dc4 = fourthCanvas.getContext("2d");
+            var gradient4 = dc4.createRadialGradient(200, 100, 0, 200, 100, 100);
+            gradient4.addColorStop(0, "yellow");
+            gradient4.addColorStop(1, "red");
+            dc4.fillStyle = gradient4;
+            dc4.fillRect(100, 50, 200, 100);
+
+            var fifthCanvas = document.getElementById("fifth");
+            var dc5 = fifthCanvas.getContext("2d");
+
+            var img = new Image();
+            img.src = "../images/wood.jpeg";
+            img.onload = function () {
+                dc5.fillStyle = dc5.createPattern(img, "repeat");
+                dc5.fillRect(100, 50, 200, 100);
+            }
+
+            var sixthCanvas = document.getElementById("sixth");
+            var dc6 = sixthCanvas.getContext("2d");
+            dc6.font = "bold 72pt sans-serif";
+            dc6.strokeStyle = "red";
+            dc6.strokeText("HTML5", 40, 130);
+
+            var seventhCanvas = document.getElementById("seventh");
+            var dc7 = seventhCanvas.getContext("2d");
+            dc7.font = "bold 72pt sans-serif";
+            dc7.fillStyle = "red";
+            dc7.fillText("HTML5", 40, 130);
+
+            var eighthCanvas = document.getElementById("eighth");
+            var dc8 = eighthCanvas.getContext("2d");
+            var gradient8 = dc8.createLinearGradient(100, 50, 300, 50);
+            gradient8.addColorStop(0, "red");
+            gradient8.addColorStop(0.5, "yellow");
+            gradient8.addColorStop(1, "blue");
+            dc8.font = "bold 72pt sans-serif";
+            dc8.fillStyle = gradient8;
+            dc8.fillText("HTML5", 40, 130);
+
+            var ninethCanvas = document.getElementById("nineth");
+            var dc9 = ninethCanvas.getContext("2d");
+            dc9.font = "bold 72pt sans-serif";
+            dc9.fillStyle = "blue";
+            dc9.textAlign = "center";
+            dc9.textBaseline = "middle";
+            dc9.fillText("HTML5", 200, 100);
+            var metrics = dc9.measureText("HTML5");
+            console.log("Width: " + metrics.width + "px");
+
+            var tenthCanvas = document.getElementById("tenth");
+            var dc10 = tenthCanvas.getContext("2d");
+            dc10.shadowOffsetX = 8;
+            dc10.shadowOffsetY = 8;
+            dc10.shadowBlur = 12;
+            dc10.shadowColor = "rgba(0, 0, 0, 0.5)";
+            dc10.fillStyle = "red";
+            dc10.fillRect(100, 50, 200, 100);
+
+            var eleventhCanvas = document.getElementById("eleventh");
+            var dc11 = eleventhCanvas.getContext("2d");
+            dc11.beginPath();
+            dc11.arc(200, 100, 50, 0, Math.PI * 2, false);
+            dc11.fillStyle = "red";
+            dc11.fill();
+
+            var twelfthCanvas = document.getElementById("twelfth");
+            var dc12 = twelfthCanvas.getContext("2d");
+            dc12.beginPath();
+            dc12.moveTo(200, 50);
+            dc12.lineTo(150, 150);
+            dc12.lineTo(250, 150);
+            dc12.lineTo(200, 50);
+            dc12.lineWidth = 8;
+            dc12.lineCap = "round";
+            dc12.strokeStyle = "red";
+            dc12.stroke();
+
+            var thirteenthCanvas = document.getElementById("thirteenth");
+            var dc13 = thirteenthCanvas.getContext("2d");
+            dc13.beginPath();
+            dc13.rect(0, 75, 400, 50);
+            dc13.clip();
+            dc13.beginPath();
+            dc13.arc(200, 100, 50, 0, Math.PI * 2, true);
+            dc13.fillStyle = "red";
+            dc13.fill();
+
+            var fourteenthCanvas = document.getElementById("fourteenth");
+            var dc14 = fourteenthCanvas.getContext("2d");
+
+            var bitmap = dc14.createImageData(200, 100);
+            for (let x = 0; x < bitmap.width; x++) {
+                for (let y = 0; y < bitmap.height; y++) {
+                    drawRandomColor(bitmap, x, y);
+                }
+            }
+
+            dc14.putImageData(bitmap, 100, 50);
+
+            function drawRandomColor(bitmap, x, y) {
+                var index = (x + y * bitmap.width) << 2;
+                bitmap.data[index + 0] = Math.random() * 256; // Red
+                bitmap.data[index + 1] = Math.random() * 256; // Green
+                bitmap.data[index + 2] = Math.random() * 256; // Blue
+                bitmap.data[index + 3] = 255; // Alpha
+            }
+
+            var fifteenthCanvas = document.getElementById("fifteenth");
+            var dc15 = fifteenthCanvas.getContext("2d");
+            var img15 = new Image();
+            img15.src = "../images/wood.jpeg";
+            img15.onload = function () {
+                dc15.drawImage(img15, 0, 50, 200, 100);
+                var bitmap15 = dc15.getImageData(0, 50, 200, 100);
+                for (let x = 0; x < bitmap15.width; x++) {
+                    for (let y = 0; y < bitmap15.height; y++) {
+                        toGray(bitmap15, x, y);
+                    }
+                }
+
+                dc15.putImageData(bitmap15, 200, 50);
+            }
+
+            function toGray(bitmap, x, y) {
+                var index = (x + y * bitmap.width) << 2;
+                var gray = (0.21 * bitmap.data[index + 0]) +
+                    (0.72 * bitmap.data[index + 1]) +
+                    (0.07 * bitmap.data[index + 2]);
+                bitmap.data[index + 0] = gray; // Red
+                bitmap.data[index + 1] = gray; // Green
+                bitmap.data[index + 2] = gray; // Blue
+            }
+
+            var sixteenthCanvas = document.getElementById("sixteenth");
+            var dc16 = sixteenthCanvas.getContext("2d");
+            dc16.fillStyle = "red";
+            let x = 0,
+                y = 0;
+            dc16.fillRect(x, y, 100, 50);
+
+            let direction = "down";
+
+            //setInterval(moveRect, 10);
+            moveRect();
+
+            function moveRect() {
+                dc16.clearRect(x, y, 100, 50);
+
+                if (direction === "down" && y === sixteenthCanvas.height - 50) {
+                    direction = "right";
+                } else if (direction === "right" && x === sixteenthCanvas.width - 100) {
+                    direction = "up";
+                } else if (direction === "up" && y === 0) {
+                    direction = "left";
+                } else if (direction === "left" && x === 0) {
+                    direction = "down";
+                }
+
+                let speed = 3;
+
+                switch (direction) {
+                    case "down":
+                        y += speed;
+                        break;
+                    case "right":
+                        x += speed;
+                        break;
+                    case "up":
+                        y -= speed;
+                        break;
+                    case "left":
+                        x -= speed;
+                        break;
+                    default:
+                        break;
+                }
+
+                dc16.fillRect(x, y, 100, 50);
+                requestAnimationFrame(moveRect);
+            }
+
+            var seventeenthCanvas = document.getElementById("seventeenth");
+            var dc17 = seventeenthCanvas.getContext("2d");
+            dc17.translate(100, 0);
+            dc17.fillStyle = "red";
+            dc17.fillRect(100, 50, 200, 100);
+
+            var eighthCanvas = document.getElementById("eighteenth");
+            var dc18 = eighthCanvas.getContext("2d");
+            dc18.rotate(45 * Math.PI / 180);
+            dc18.fillStyle = "red";
+            dc18.fillRect(100, 0, 200, 100);
+
+            var nineteenthCanvas = document.getElementById("nineteenth");
+            var dc19 = nineteenthCanvas.getContext("2d");
+            dc19.scale(0.5, 1.0);
+            dc19.fillStyle = "red";
+            dc19.fillRect(100, 50, 200, 100);
+
+            var twentyCanvas = document.getElementById("twenty");
+            var dc20 = twentyCanvas.getContext("2d");
+            dc20.setTransform(1, 0, -0.5, 1, 0, 0);
+            dc20.fillStyle = "red";
+            dc20.fillRect(100, 50, 200, 100);
+        }
+    </script>
+
+</body>
+
+</html>

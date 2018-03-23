@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>File API</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script type="text/javascript">
+        if (!window.File || !window.FileReader || !window.FileList) {
+            alert('File API not supported in this browser');
+        } else {
+            document.getElementById("picker").addEventListener("change", onFileSelected, false);
+            document.getElementById("multi-picker").addEventListener("change", onFileSelected, false);
+
+            let target = document.getElementById("DropTarget");
+            target.addEventListener("dragover", onDragOver, false);
+            target.addEventListener("drop", onDrop, false);
+
+        }
+
+        if ("webkitRequestFileSystem" in window) {
+            window.requestFileSystem = window.webkitRequestFileSystem;
+        }
+        if (!window.requestFileSystem) {
+            alert('FileSystem API not supported in this browser');
+        } else {
+            window.requestFileSystem(
+                window.TEMPORARY, // window.PERSISTENT,
+                5 * 1024 * 1024,
+                function (fs) {
+                    fs.root.getFile("Log.txt", {
+                        create: true
+                    }, function (fe) {
+                        fe.createWriter(function (writer) {
+                            writer.onwriteend = function (e) {
+                                alert("write completed");
+                            }
+
+                            writer.onerror = function (e) {
+                                alert("write failed");
+                            }
+
+                            var blob = new Blob(["123456"]);
+                            writer.write(blob);
+                        });
+                    }, onError);
+                }, onError
+            );
+
+            window.requestFileSystem(
+                window.TEMPORARY, // window.PERSISTENT,
+                5 * 1024 * 1024,
+                function (fs) {
+                    fs.root.getFile("Log.txt", {
+                        create: false
+                    }, function (fe) {
+                        fe.createWriter(function (writer) {
+                            writer.onwriteend = function (e) {
+                                alert("write completed");
+                            }
+
+                            writer.onerror = function (e) {
+                                alert("write failed");
+                            }
+
+                            writer.seek(writer.length);
+
+                            var blob = new Blob(["123456"]);
+                            writer.write(blob);
+                        });
+
+                        fe.file(function (file) {
+                            var reader = new FileReader();
+
+                            reader.onload = function (e) {
+                                alert(e.target.result);
+                            }
+
+                            reader.readAsText(file);
+                        }, onError);
+
+                        fe.remove(function () {
+                            alert("File removed");
+                        }, onError)
+                    }, onError);
+                }, onError
+            );
+
+            function onError(e) {
+                var reason = e.code;
+            }
+        }
+
+        function processFiles(files) {
+            if (files) {
+                for (let i = 0; i < files.length; i++) {
+                    const file = files[i];
+
+                    let name = file.name;
+                    let type = file.type;
+                    let size = file.size;
+                    let stamp = file.lastModifiedDate;
+
+                    if (file.type.match('text.*')) {
+                        processTextFile(file);
+                    } else if (file.type.match('image.*')) {
+                        processImageFile(file);
+                    } else {
+                        processByteFile(file);
+                    }
+                }
+            }
+        }
+
+        function processTextFile(file) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var data = e.target.result;
+            }
+
+            reader.onerror = function (e) {
+                alert(e.target.error.code);
+            }
+
+            reader.readAsText(file);
+        }
+
+        function processImageFile(file) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var image = document.getElementById("image");
+                image.src = e.target.result;
+            }
+
+            reader.onerror = function (e) {
+                alert(e.target.error.code);
+            }
+
+            reader.readAsDataURL(file);
+        }
+
+        function processByteFile(file) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                var bytes = new Uint8Array(e.target.result);
+                for (let i = 0; i < bytes.length; i++) {
+                    const byte = bytes[i];
+                }
+            }
+
+            reader.onerror = function (e) {
+                alert(e.target.error.code);
+            }
+
+            //reader.readAsArrayBuffer(file);
+
+            var blob;
+            if (file.slice) {
+                blob = file.slice(5, 10);
+            } else if (file.webkitSlice) {
+                blob = file.webkitSlice(5, 10);
+            } else if (file.mozSlice) {
+                blob = file.mozSlice(5, 10);
+            } else {
+                alert('slice is not supported');
+            }
+
+            reader.readAsArrayBuffer(blob);
+        }
+
+        function onFileSelected(e) {
+            var files = e.target.Files;
+
+            processFiles(files);
+        }
+
+        function onDragOver(e) {
+            e.preventDefault();
+        }
+
+        function onDrop(e) {
+            e.preventDefault();
+
+            var files = e.dataTransfer.files;
+            processFiles(files);
+        }
+    </script>
+</head>
+
+<body>
+    <input id="picker" type="file" />
+    <input id="multi-picker" type="file" multiple />
+
+    <div id="DropTarget"></div>
+
+    <img id="image" src="" alt="" />
+
+</body>
+
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web Workers</title>
+    <script>
+        if (!window.worker) {
+            alert('Dedicated workers not supported in this browser');
+        } else {
+            let worker = new Worker("add.js");
+
+            worker.addEventListener("message", onMessage, false);
+            worker.postMessage({
+                op1: 2,
+                op2: 2
+            }); // Pass values to worker
+
+            worker.addEventListener("error", onError, false);
+
+            function onMessage(e) {
+                alert(e.data); // Display sum
+            }
+
+            function onError(err) {
+                let script = e.filename // Script URI (fully qualified)
+                let linenum = e.lineno; // Line number where error occurred
+                let message = e.message; // Error message
+
+                alert(message + " (" + script + ", line " + linenum + ")");
+            }
+
+            worker.terminate();
+        }
+        if (!window.SharedWorker) {
+            alert('Shared workers not supported in this browser');
+        } else {
+            let worker = new SharedWorker("shared-add.js");
+            worker.port.addEventListener("message", onMessage, false);
+            worker.port.start();
+            worker.port.postMessage({
+                op1: 2,
+                op2: 2
+            });
+
+            function onMessage(e) {
+                alert(e.data); // Display sum
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>

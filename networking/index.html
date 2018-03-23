@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Networking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="main.css" />
+    <script type="text/javascript">
+        var xhr = new XMLHttpRequest();
+
+        if (!("response" in xhr)) {
+            alert('XMLHttpRequest is not supported in this browser');
+        } else {
+            xhr.open('GET', 'service', true);
+            xhr.addEventListener('load', onLoad, false);
+            xhr.addEventListener('error', onError, false);
+            xhr.addEventListener('timeout', onTimeout, false);
+            xhr.timeout = 10000;
+            xhr.send();
+
+            function onLoad(e) {
+                alert('Loaded');
+            }
+
+            function onError(err) {
+                alert('Error');
+            }
+
+            function onTimeout(e) {
+                alert('request timed out');
+            }
+        }
+        if (!window.webSocket) {
+            alert('WebSocket is not supported in this browser');
+        } else {
+            var ws = new WebSocket('ws://echo.websocket.org');
+
+            var state = ws.readyState;
+
+            switch (state) {
+                case WebSocket.CONNECTING:
+
+                    break;
+                case WebSocket.OPEN:
+
+                    break;
+                case WebSocket.CLOSING:
+
+                    break;
+                case WebSocket.CLOSED:
+
+                    break;
+                default:
+                    break;
+            }
+
+            ws.send('test');
+
+            ws.addEventListener('message', onMessageReceived, false);
+            ws.addEventListener('error', onError, false);
+
+            function onMessagereceived(e) {
+                var message = e.data;
+            }
+
+            function onError(e) {
+                alert(e.message);
+            }
+
+            ws.close();
+        }
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
